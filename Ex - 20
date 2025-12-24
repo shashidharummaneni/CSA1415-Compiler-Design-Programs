@@ -1,0 +1,22 @@
+%{
+#include <stdio.h>
+int macros = 0, headers = 0;
+%}
+
+DIGIT   [0-9]
+
+%%
+"#define".*        { macros++; }
+"#include".*       { headers++; }
+
+{DIGIT}+(\.{DIGIT}+)?   { printf("Constant: %s\n", yytext); }
+
+.|\n               ;
+%%
+
+int main() {
+    yylex();
+    printf("Number of macros: %d\n", macros);
+    printf("Number of header files: %d\n", headers);
+    return 0;
+}
